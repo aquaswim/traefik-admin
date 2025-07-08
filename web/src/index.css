@@ -1,1 +1,5 @@
 @import "bootstrap/dist/css/bootstrap.css";
+
+.main {
+    padding-top: 5rem;
+}
