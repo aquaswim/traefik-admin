@@ -33,6 +33,7 @@ function ServiceNew() {
           }}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+          isEditForm={false}
         />
       </Card.Body>
     </Card>

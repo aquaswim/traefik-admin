@@ -78,6 +78,7 @@ function ServiceEdit() {
           initialValues={service}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
+          isEditForm={true}
         />
       </Card.Body>
     </Card>

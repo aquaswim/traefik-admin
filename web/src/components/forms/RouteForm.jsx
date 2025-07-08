@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Stack } from "react-bootstrap";
 
-function RouteForm({ initialValues = {}, onSubmit, onCancel }) {
+function RouteForm({
+  initialValues = {},
+  onSubmit,
+  onCancel,
+  isEditForm = false,
+}) {
   const [formData, setFormData] = useState({
     id: "",
     type: "http",
@@ -46,6 +51,7 @@ function RouteForm({ initialValues = {}, onSubmit, onCancel }) {
           value={formData.id}
           onChange={handleChange}
           required
+          disabled={isEditForm}
         />
       </Form.Group>
 

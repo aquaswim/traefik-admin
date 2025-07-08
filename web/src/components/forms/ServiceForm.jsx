@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col, Stack } from "react-bootstrap";
 
-function ServiceForm({ initialValues = {}, onSubmit, onCancel }) {
+function ServiceForm({
+  initialValues = {},
+  onSubmit,
+  onCancel,
+  isEditForm = false,
+}) {
   const [formData, setFormData] = useState({
     id: "",
     servers: [""],
@@ -69,6 +74,7 @@ function ServiceForm({ initialValues = {}, onSubmit, onCancel }) {
           value={formData.id}
           onChange={handleChange}
           required
+          disabled={isEditForm}
         />
       </Form.Group>
 

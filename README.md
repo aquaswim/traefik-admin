@@ -32,4 +32,4 @@ The application will start on port 3000. You can access it at http://localhost:3
 
 ## API Endpoints
 
-- `GET /`: Returns a "Hello, World!" message
+- `GET /api`: Returns a "Hello, World!" message
