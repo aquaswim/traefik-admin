@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"traefik-admin-go/web"
 
 	"github.com/gofiber/fiber/v2"
 	"traefik-admin-go/internal/adapters/http"
@@ -26,6 +27,7 @@ func main() {
 
 	// Register routes
 	httpHandler.RegisterRoutes(app)
+	web.RegisterRoutes(app)
 
 	// Start server
 	log.Println("Starting Traefik Admin server on :3000")

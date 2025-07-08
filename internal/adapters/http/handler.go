@@ -20,7 +20,7 @@ func NewHandler(appService *application.Service) *Handler {
 // RegisterRoutes registers all HTTP routes
 func (h *Handler) RegisterRoutes(app *fiber.App) {
 	// Register the hello world route
-	app.Get("/", h.HelloWorld)
+	app.Get("_/", h.HelloWorld)
 }
 
 // HelloWorld handles the hello world request
