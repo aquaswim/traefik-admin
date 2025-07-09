@@ -2,17 +2,21 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { Card } from "react-bootstrap";
 import ServiceForm from "../../components/forms/ServiceForm";
+import { useMCreateService } from "../../lib/query.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ServiceNew() {
   const navigate = useNavigate();
 
+  const { mutate } = useMCreateService(useQueryClient());
+
   const handleSubmit = (formData) => {
     // In a real application, this would be an API call to create the service
-    console.log("Creating new service:", formData);
-
-    // Simulate successful creation
-    alert(`Service "${formData.id}" created successfully!`);
-    navigate("/config/services");
+    mutate(formData, {
+      onSuccess: () => {
+        navigate("/config/services");
+      },
+    });
   };
 
   const handleCancel = () => {

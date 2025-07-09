@@ -1,40 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Table, Button, Card, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
-
-// Mock data for demonstration
-const mockServices = [
-  {
-    id: "service1",
-    servers: ["server1.example.com", "server2.example.com"],
-    type: "http",
-  },
-  {
-    id: "service2",
-    servers: ["192.168.1.1:8080"],
-    type: "tcp",
-  },
-  {
-    id: "service3",
-    servers: ["udp-server.example.com:53"],
-    type: "udp",
-  },
-];
+import { useMDeleteService, useQListServices } from "../../lib/query.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 function ServiceList() {
-  const [services, setServices] = useState([]);
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // Simulate fetching data
-  useEffect(() => {
-    // In a real application, this would be an API call
-    setServices(mockServices);
-  }, []);
+  const { data } = useQListServices();
+  const { mutate: deleteSvc } = useMDeleteService(queryClient);
+
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     // In a real application, this would be an API call
     if (window.confirm(`Are you sure you want to delete service "${id}"?`)) {
-      setServices(services.filter((service) => service.id !== id));
+      deleteSvc({ id });
     }
   };
 
@@ -51,7 +32,7 @@ function ServiceList() {
         </Stack>
       </Card.Header>
       <Card.Body>
-        {services.length === 0 ? (
+        {data.length === 0 ? (
           <p className="text-center">No services found.</p>
         ) : (
           <Table striped bordered hover responsive>
@@ -64,7 +45,7 @@ function ServiceList() {
               </tr>
             </thead>
             <tbody>
-              {services.map((service) => (
+              {data.map((service) => (
                 <tr key={service.id}>
                   <td>{service.id}</td>
                   <td>{service.type.toUpperCase()}</td>
