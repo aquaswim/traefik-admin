@@ -2,11 +2,14 @@ module traefik-admin-go
 
 go 1.24
 
-require github.com/gofiber/fiber/v2 v2.52.8
+require (
+	github.com/aquaswim/govite v0.0.4
+	github.com/gofiber/fiber/v2 v2.52.8
+	gopkg.in/yaml.v3 v3.0.1
+)
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/aquaswim/govite v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

@@ -12,13 +12,13 @@ export const useQListServices = () =>
   });
 
 export const useQGetServicesByID = (id) =>
-    useQuery({
-        queryKey: ["services", id],
-        queryFn: () => {
-            return api.getServiceByID(id);
-        },
-        enabled: !!id,
-    });
+  useQuery({
+    queryKey: ["services", id],
+    queryFn: () => {
+      return api.getServiceByID(id);
+    },
+    enabled: !!id,
+  });
 
 export const useMCreateService = (queryClient) =>
   useMutation({
@@ -93,4 +93,14 @@ export const useMUpdateRoute = (queryClient) =>
     onSettled: (data) => {
       queryClient.invalidateQueries({ queryKey: ["routes", data.id] });
     },
+  });
+
+// trafik config
+export const useQTraefikConfig = (type) =>
+  useQuery({
+    queryKey: ["traefik-config", type],
+    queryFn: () => {
+      return api.getTraefikConfig(type);
+    },
+    enabled: !!type,
   });

@@ -7,15 +7,21 @@ import (
 
 // Handler represents the HTTP handler
 type Handler struct {
-	serviceHandler *ServiceHandler
-	routeHandler   *RouteHandler
+	serviceHandler       *ServiceHandler
+	routeHandler         *RouteHandler
+	traefikConfigHandler *TraefikConfigHandler
 }
 
 // NewHandler creates a new HTTP handler
-func NewHandler(serviceService *application.ServiceService, routeService *application.RouteService) *Handler {
+func NewHandler(
+	serviceService *application.ServiceService,
+	routeService *application.RouteService,
+	traefikConfigService *application.TraefikConfigService,
+) *Handler {
 	return &Handler{
-		serviceHandler: NewServiceHandler(serviceService),
-		routeHandler:   NewRouteHandler(routeService),
+		serviceHandler:       NewServiceHandler(serviceService),
+		routeHandler:         NewRouteHandler(routeService),
+		traefikConfigHandler: NewTraefikConfigHandler(traefikConfigService),
 	}
 }
 
@@ -28,4 +34,7 @@ func (h *Handler) RegisterRoutes(app *fiber.App) {
 
 	// Register route routes
 	h.routeHandler.RegisterRoutes(api)
+
+	// Register traefik config routes
+	h.traefikConfigHandler.RegisterRoutes(api)
 }

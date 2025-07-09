@@ -11,7 +11,8 @@ function RouteEdit() {
   const queryClient = useQueryClient();
 
   const { data: route, isLoading: loading, error } = useQGetRouteByID(id);
-  const { mutate: updateRoute, error: mutateError } = useMUpdateRoute(queryClient);
+  const { mutate: updateRoute, error: mutateError } =
+    useMUpdateRoute(queryClient);
 
   const handleSubmit = (formData) => {
     updateRoute(
@@ -20,7 +21,7 @@ function RouteEdit() {
         onSuccess: () => {
           navigate("/config/routers");
         },
-      }
+      },
     );
   };
 

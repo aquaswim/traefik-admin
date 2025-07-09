@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router";
 import { Alert, Card } from "react-bootstrap";
 import ServiceForm from "../../components/forms/ServiceForm";
-import api from "../../lib/api.js";
-import {useMUpdateService, useQGetServicesByID} from "../../lib/query.js";
+import { useMUpdateService, useQGetServicesByID } from "../../lib/query.js";
 import { useQueryClient } from "@tanstack/react-query";
 
 function ServiceEdit() {
@@ -12,15 +11,22 @@ function ServiceEdit() {
 
   const queryClient = useQueryClient();
 
-  const {data: service, isLoading: fetchLoading, error: fetchError} = useQGetServicesByID(id)
+  const {
+    data: service,
+    isLoading: fetchLoading,
+    error: fetchError,
+  } = useQGetServicesByID(id);
   const { mutate, error: mutateError } = useMUpdateService(queryClient);
 
   const handleSubmit = (formData) => {
-    mutate({ ...formData, id: id }, {
-      onSuccess: () => {
-        navigate("/config/services");
+    mutate(
+      { ...formData, id: id },
+      {
+        onSuccess: () => {
+          navigate("/config/services");
+        },
       },
-    });
+    );
   };
 
   const handleCancel = () => {

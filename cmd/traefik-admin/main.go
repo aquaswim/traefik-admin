@@ -18,9 +18,10 @@ func main() {
 	// Initialize application layer
 	serviceService := application.NewServiceService(serviceRepository)
 	routeService := application.NewRouteService(routeRepository)
+	traefikConfigService := application.NewTraefikConfigService(routeRepository, serviceRepository)
 
 	// Initialize HTTP adapter (infrastructure layer)
-	httpHandler := http.NewHandler(serviceService, routeService)
+	httpHandler := http.NewHandler(serviceService, routeService, traefikConfigService)
 
 	// Create Fiber app
 	app := fiber.New(fiber.Config{

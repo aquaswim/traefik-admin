@@ -42,6 +42,11 @@ const api = {
     }).then((res) => res.json()),
   deleteRouteByID: (id) =>
     fetch(`/api/routes/${id}`, { method: DELETE }).then((res) => res.json()),
+
+  getTraefikConfig: (type) =>
+    fetch(`/api/traefik-config/${type}`, { method: GET }).then((res) =>
+      res.text(),
+    ),
 };
 
 export default api;
