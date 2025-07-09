@@ -33,7 +33,7 @@ func RegisterRoutes(app *fiber.App) {
 
 		c.Set("Content-Type", "text/html; charset=utf-8")
 		return templ.ExecuteTemplate(c.Context(), "index", fiber.Map{
-			"title":   "Hello World",
+			"title":   "Traefik Admin",
 			"style":   template.HTML(viteAsset.CreateStyleTags()),
 			"script":  template.HTML(viteAsset.CreateScriptTags()),
 			"preload": template.HTML(viteAsset.CreatePreloadTags()),
