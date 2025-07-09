@@ -6,19 +6,21 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"traefik-admin-go/internal/adapters/http"
+	"traefik-admin-go/internal/adapters/repository"
 	"traefik-admin-go/internal/application"
-	"traefik-admin-go/internal/domain"
 )
 
 func main() {
-	// Initialize domain layer
-	domainService := domain.NewService()
+	// Initialize repositories
+	serviceRepository := repository.NewMemoryServiceRepository()
+	routeRepository := repository.NewMemoryRouteRepository()
 
 	// Initialize application layer
-	appService := application.NewService(domainService)
+	serviceService := application.NewServiceService(serviceRepository)
+	routeService := application.NewRouteService(routeRepository)
 
 	// Initialize HTTP adapter (infrastructure layer)
-	httpHandler := http.NewHandler(appService)
+	httpHandler := http.NewHandler(serviceService, routeService)
 
 	// Create Fiber app
 	app := fiber.New(fiber.Config{

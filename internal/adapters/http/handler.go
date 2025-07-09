@@ -7,25 +7,25 @@ import (
 
 // Handler represents the HTTP handler
 type Handler struct {
-	appService *application.Service
+	serviceHandler *ServiceHandler
+	routeHandler   *RouteHandler
 }
 
 // NewHandler creates a new HTTP handler
-func NewHandler(appService *application.Service) *Handler {
+func NewHandler(serviceService *application.ServiceService, routeService *application.RouteService) *Handler {
 	return &Handler{
-		appService: appService,
+		serviceHandler: NewServiceHandler(serviceService),
+		routeHandler:   NewRouteHandler(routeService),
 	}
 }
 
 // RegisterRoutes registers all HTTP routes
 func (h *Handler) RegisterRoutes(app *fiber.App) {
 	api := app.Group("/api")
-	// Register the hello world route
-	api.Get("/", h.HelloWorld)
-}
 
-// HelloWorld handles the hello world request
-func (h *Handler) HelloWorld(c *fiber.Ctx) error {
-	message := h.appService.GetHelloMessage()
-	return c.SendString(message)
+	// Register service routes
+	h.serviceHandler.RegisterRoutes(api)
+
+	// Register route routes
+	h.routeHandler.RegisterRoutes(api)
 }
