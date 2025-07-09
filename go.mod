@@ -4,6 +4,7 @@ go 1.24
 
 require (
 	github.com/aquaswim/govite v0.0.4
+	github.com/caarlos0/env/v11 v11.3.1
 	github.com/dgraph-io/badger/v4 v4.7.0
 	github.com/gofiber/fiber/v2 v2.52.8
 	github.com/vmihailenco/msgpack/v5 v5.4.1

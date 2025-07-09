@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"traefik-admin-go/internal/config"
 	"traefik-admin-go/web"
 
 	"github.com/gofiber/fiber/v2"
@@ -17,8 +18,10 @@ import (
 )
 
 func main() {
+	cfg := config.MustLoadConfig()
+
 	// db
-	db, err := badger.Open(badger.DefaultOptions("./dev.db"))
+	db, err := badger.Open(badger.DefaultOptions(cfg.DBPath))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,9 +49,9 @@ func main() {
 	web.RegisterRoutes(app)
 
 	// Start server
-	log.Println("Starting Traefik Admin server on :3000")
+	log.Println("Starting Traefik Admin server")
 	go func() {
-		if err := app.Listen(":3000"); err != nil {
+		if err := app.Listen(cfg.Addr); err != nil {
 			log.Fatalf("Failed to start server: %v", err)
 		}
 	}()
