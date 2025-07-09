@@ -1,43 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Table, Button, Card, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router";
-
-// Mock data for demonstration
-const mockRoutes = [
-  {
-    id: "route1",
-    type: "http",
-    rule: "Host(`example.com`) && Path(`/api`)",
-    service: "service1",
-  },
-  {
-    id: "route2",
-    type: "tcp",
-    rule: "HostSNI(`example.com`)",
-    service: "service2",
-  },
-  {
-    id: "route3",
-    type: "udp",
-    rule: "HostSNI(`udp-example.com`)",
-    service: "service3",
-  },
-];
+import { useQListRoutes, useMDeleteRoute } from "../../lib/query.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 function RouteList() {
-  const [routes, setRoutes] = useState([]);
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // Simulate fetching data
-  useEffect(() => {
-    // In a real application, this would be an API call
-    setRoutes(mockRoutes);
-  }, []);
+  const { data } = useQListRoutes();
+  const { mutate: deleteRoute } = useMDeleteRoute(queryClient);
+
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     // In a real application, this would be an API call
     if (window.confirm(`Are you sure you want to delete route "${id}"?`)) {
-      setRoutes(routes.filter((route) => route.id !== id));
+      deleteRoute({ id });
     }
   };
 
@@ -54,7 +32,7 @@ function RouteList() {
         </Stack>
       </Card.Header>
       <Card.Body>
-        {routes.length === 0 ? (
+        {data.length === 0 ? (
           <p className="text-center">No routes found.</p>
         ) : (
           <Table striped bordered hover responsive>
@@ -68,7 +46,7 @@ function RouteList() {
               </tr>
             </thead>
             <tbody>
-              {routes.map((route) => (
+              {data.map((route) => (
                 <tr key={route.id}>
                   <td>{route.id}</td>
                   <td>{route.type.toUpperCase()}</td>

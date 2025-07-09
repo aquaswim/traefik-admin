@@ -3,61 +3,40 @@ import { useNavigate, useParams } from "react-router";
 import { Alert, Card } from "react-bootstrap";
 import ServiceForm from "../../components/forms/ServiceForm";
 import api from "../../lib/api.js";
-import { useMUpdateService } from "../../lib/query.js";
+import {useMUpdateService, useQGetServicesByID} from "../../lib/query.js";
 import { useQueryClient } from "@tanstack/react-query";
 
 function ServiceEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [service, setService] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMUpdateService(queryClient);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await api.getServiceByID(id);
-        setService(data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+  const {data: service, isLoading: fetchLoading, error: fetchError} = useQGetServicesByID(id)
+  const { mutate, error: mutateError } = useMUpdateService(queryClient);
 
   const handleSubmit = (formData) => {
-    setLoading(true);
-    mutateAsync({ ...formData, id: id })
-      .then(() => {
+    mutate({ ...formData, id: id }, {
+      onSuccess: () => {
         navigate("/config/services");
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      },
+    });
   };
 
   const handleCancel = () => {
     navigate("/config/services");
   };
 
-  if (loading) {
+  if (fetchLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
+  if (fetchError) {
+    return <Alert variant="danger">{fetchError}</Alert>;
+  }
+
+  if (mutateError) {
+    return <Alert variant="danger">{mutateError}</Alert>;
   }
 
   return (

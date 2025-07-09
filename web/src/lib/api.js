@@ -22,6 +22,26 @@ const api = {
     }).then((res) => res.json()),
   deleteServiceByID: (id) =>
     fetch(`/api/services/${id}`, { method: DELETE }).then((res) => res.json()),
+
+  // Routes API
+  getRoutes: () =>
+    fetch("/api/routes", { method: GET }).then((res) => res.json()),
+  createRoute: (data) =>
+    fetch("/api/routes", {
+      method: POST,
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json()),
+  getRouteByID: (id) =>
+    fetch(`/api/routes/${id}`, { method: GET }).then((res) => res.json()),
+  updateRouteByID: (id, data) =>
+    fetch(`/api/routes/${id}`, {
+      method: PUT,
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json()),
+  deleteRouteByID: (id) =>
+    fetch(`/api/routes/${id}`, { method: DELETE }).then((res) => res.json()),
 };
 
 export default api;
