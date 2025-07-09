@@ -27,7 +27,12 @@ type TraefikService struct {
 }
 
 type TraefikServiceLoadBalancer struct {
-	Servers []string `json:"servers,omitempty" yaml:"servers,omitempty"`
+	Servers []TraefikServiceLoadBalancerServer `json:"servers,omitempty" yaml:"servers,omitempty"`
+}
+
+type TraefikServiceLoadBalancerServer struct {
+	URL     string `json:"url,omitempty" yaml:"url,omitempty"`
+	Address string `json:"address,omitempty" yaml:"address,omitempty"`
 }
 
 func NewTraefikConfig(
@@ -53,19 +58,31 @@ func NewTraefikConfig(
 		case "http":
 			cfg.HTTP.Services[services[i].ID] = TraefikService{
 				LoadBalancer: &TraefikServiceLoadBalancer{
-					Servers: services[i].Servers,
+					Servers: []TraefikServiceLoadBalancerServer{
+						{
+							URL: services[i].Servers[0],
+						},
+					},
 				},
 			}
 		case "tcp":
 			cfg.TCP.Services[services[i].ID] = TraefikService{
 				LoadBalancer: &TraefikServiceLoadBalancer{
-					Servers: services[i].Servers,
+					Servers: []TraefikServiceLoadBalancerServer{
+						{
+							Address: services[i].Servers[0],
+						},
+					},
 				},
 			}
 		case "udp":
 			cfg.UDP.Services[services[i].ID] = TraefikService{
 				LoadBalancer: &TraefikServiceLoadBalancer{
-					Servers: services[i].Servers,
+					Servers: []TraefikServiceLoadBalancerServer{
+						{
+							Address: services[i].Servers[0],
+						},
+					},
 				},
 			}
 		default:

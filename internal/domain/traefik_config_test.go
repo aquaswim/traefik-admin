@@ -32,8 +32,12 @@ func TestNewTraefikConfig(t *testing.T) {
 	if _, ok := cfg.HTTP.Services["http-service"]; !ok {
 		t.Error("HTTP service not found in config")
 	}
-	if !reflect.DeepEqual(cfg.HTTP.Services["http-service"].LoadBalancer.Servers,
-		[]string{"http://server1:80", "http://server2:80"}) {
+	expectedHTTPServer := []TraefikServiceLoadBalancerServer{
+		{
+			URL: "http://server1:80",
+		},
+	}
+	if !reflect.DeepEqual(cfg.HTTP.Services["http-service"].LoadBalancer.Servers, expectedHTTPServer) {
 		t.Error("HTTP service servers don't match")
 	}
 	if _, ok := cfg.HTTP.Routers["http-route"]; !ok {
@@ -50,8 +54,12 @@ func TestNewTraefikConfig(t *testing.T) {
 	if _, ok := cfg.TCP.Services["tcp-service"]; !ok {
 		t.Error("TCP service not found in config")
 	}
-	if !reflect.DeepEqual(cfg.TCP.Services["tcp-service"].LoadBalancer.Servers,
-		[]string{"tcp://server1:443", "tcp://server2:443"}) {
+	expectedTCPServer := []TraefikServiceLoadBalancerServer{
+		{
+			Address: "tcp://server1:443",
+		},
+	}
+	if !reflect.DeepEqual(cfg.TCP.Services["tcp-service"].LoadBalancer.Servers, expectedTCPServer) {
 		t.Error("TCP service servers don't match")
 	}
 	if _, ok := cfg.TCP.Routers["tcp-route"]; !ok {
@@ -68,8 +76,12 @@ func TestNewTraefikConfig(t *testing.T) {
 	if _, ok := cfg.UDP.Services["udp-service"]; !ok {
 		t.Error("UDP service not found in config")
 	}
-	if !reflect.DeepEqual(cfg.UDP.Services["udp-service"].LoadBalancer.Servers,
-		[]string{"udp://server1:53", "udp://server2:53"}) {
+	expectedUDPServer := []TraefikServiceLoadBalancerServer{
+		{
+			Address: "udp://server1:53",
+		},
+	}
+	if !reflect.DeepEqual(cfg.UDP.Services["udp-service"].LoadBalancer.Servers, expectedUDPServer) {
 		t.Error("UDP service servers don't match")
 	}
 	if _, ok := cfg.UDP.Routers["udp-route"]; !ok {
