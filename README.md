@@ -8,19 +8,26 @@ Admin UI for traefik, it mimics the functionality of nginx reverse proxy manager
 
 You can run Traefik Admin using the pre-built Docker image from GitHub Container Registry:
 
-```bash
-docker run -d \
-  --name traefik-admin \
-  -p 3000:3000 \
-  -v traefik-admin-data:/config \
-  ghcr.io/aquaswim/traefik-admin:latest
-```
-
 ### Docker Compose
 
 ```yaml
 version: '3'
 services:
+  traefik:
+    image: "traefik:v3.4"
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-config:/etc/traefik
+    command:
+      - "--providers.http.endpoint=http://traefik-admin:3000/api/traefik-config/yaml"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--serverstransport.insecureskipverify=true"
+    ports:
+      - "80:80"
+      - "443:443"
   traefik-admin:
     image: ghcr.io/aquaswim/traefik-admin:latest
     container_name: traefik-admin
@@ -31,6 +38,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  traefik-config:
   traefik-admin-data:
 ```
 
