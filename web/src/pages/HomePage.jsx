@@ -1,27 +1,59 @@
 import React from "react";
-import { useQTraefikConfig } from "../lib/query.js";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import ConfigPreview from "../components/ConfigPreview.jsx";
+import {Badge, Card, Col, Row, Spinner} from "react-bootstrap";
+import {useQListRoutes, useQListServices} from "../lib/query.js";
 
 function HomePage() {
-  const { data: yamlConfig, refetch, isLoading } = useQTraefikConfig("yaml");
+    const {data: services, isLoading: isServiceLoading} = useQListServices()
+    const {data: routes, isLoading: isRouteLoading} = useQListRoutes()
+    const servicesCount = services.length;
+    const routersCount = routes.length;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <Card>
-      <Card.Header>
-        <h2>Current Config</h2>
-      </Card.Header>
-      <Card.Body>
-        <pre>{yamlConfig}</pre>
-      </Card.Body>
-      <Card.Footer>
-        <Button onClick={() => refetch()}>Refresh</Button>
-      </Card.Footer>
-    </Card>
-  );
+    return (
+        <>
+            <Row className="mb-4">
+                <Col>
+                    <Card className="text-center h-100">
+                        <Card.Header>Services</Card.Header>
+                        <Card.Body>
+                            {isServiceLoading && (
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            )}
+                            {!isServiceLoading && (
+                                <Card.Title>
+                                    <h1><Badge bg="primary">{servicesCount}</Badge></h1>
+                                </Card.Title>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Card className="text-center h-100">
+                        <Card.Header>Routers</Card.Header>
+                        <Card.Body>
+                            {isRouteLoading && (
+                                <Spinner animation="border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </Spinner>
+                            )}
+                            {!isRouteLoading && (
+                                <Card.Title>
+                                    <h1><Badge bg="success">{routersCount}</Badge></h1>
+                                </Card.Title>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <ConfigPreview/>
+                </Col>
+            </Row>
+        </>
+    );
 }
 
 export default HomePage;
